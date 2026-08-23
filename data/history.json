@@ -1,0 +1,145 @@
+{
+  "history": [
+    {
+      "id": "fd12cf1bba1f4dd58467d23e918330c3",
+      "user_email": "jayasimbu66@gmail.com",
+      "file_name": "sf4.jpg",
+      "stored_file": "/uploads/jayasimbu66_gmail.com/301d02f63bc6480fbf601eac74431f1b_sf4.jpg",
+      "created_at": "2026-07-23T05:52:12+00:00",
+      "status": "processed",
+      "process_steps": [
+        {
+          "step": "uploaded",
+          "message": "Uploaded sf4.jpg"
+        },
+        {
+          "step": "extracted",
+          "message": "Invoice fields extracted from the image"
+        },
+        {
+          "step": "saved",
+          "message": "Saved to invoice history"
+        }
+      ],
+      "data": {
+        "invoice_number": "INVIOOO",
+        "invoice_date": "2006-11-17",
+        "invoice_time": "6:50",
+        "vendor_name": "Your Company Name",
+        "subtotal": 13417.54,
+        "discount": null,
+        "tax": 1204.5,
+        "total_amount": 14622.04,
+        "items": [
+          {
+            "name": "Motorola E815",
+            "qty": "10",
+            "price": 420.0
+          },
+          {
+            "name": "Nokia 3220",
+            "qty": "12",
+            "price": 199.99
+          },
+          {
+            "name": "Itis service",
+            "qty": "3.2",
+            "price": 255.52
+          },
+          {
+            "name": "Motorola V3 Razr Black",
+            "qty": "10",
+            "price": 500.0
+          }
+        ]
+      }
+    },
+    {
+      "id": "56141fb109a043288c34e6d8b9b1589c",
+      "user_email": "ddc@gmail.com",
+      "file_name": "Whats.jpeg",
+      "stored_file": "/uploads/ddc_gmail.com/b4ab328138bf4967b063456b50d18b5c_Whats.jpeg",
+      "created_at": "2026-07-23T06:18:00+00:00",
+      "status": "processed",
+      "process_steps": [
+        {
+          "step": "uploaded",
+          "message": "Uploaded Whats.jpeg"
+        },
+        {
+          "step": "extracted",
+          "message": "Invoice fields extracted from the image"
+        },
+        {
+          "step": "saved",
+          "message": "Saved to invoice history"
+        }
+      ],
+      "data": {
+        "invoice_number": null,
+        "invoice_date": null,
+        "invoice_time": null,
+        "vendor_name": "Scrvice Kecort 4",
+        "subtotal": null,
+        "discount": null,
+        "tax": null,
+        "total_amount": null,
+        "items": []
+      }
+    },
+    {
+      "id": "538f840fa0e049f482dfa75dc045dbf2",
+      "user_email": "ddc@gmail.com",
+      "file_name": "njn.png",
+      "stored_file": "/uploads/ddc_gmail.com/386eea153817478b8ea90511bc1bba19_njn.png",
+      "created_at": "2026-07-23T06:18:52+00:00",
+      "status": "processed",
+      "process_steps": [
+        {
+          "step": "uploaded",
+          "message": "Uploaded njn.png"
+        },
+        {
+          "step": "extracted",
+          "message": "Invoice fields extracted from the image"
+        },
+        {
+          "step": "saved",
+          "message": "Saved to invoice history"
+        }
+      ],
+      "data": {
+        "invoice_number": "0000007",
+        "invoice_date": "2025-02-10",
+        "invoice_time": "50:00",
+        "vendor_name": "Your Company Inc.",
+        "subtotal": 450.0,
+        "discount": null,
+        "tax": 0.0,
+        "total_amount": 450.0,
+        "items": [
+          {
+            "name": "Furniture assembly",
+            "qty": "2",
+            "price": 50.0
+          },
+          {
+            "name": "Drywall & repair",
+            "qty": "1",
+            "price": 150.0
+          },
+          {
+            "name": "Faucet replacement",
+            "qty": "1",
+            "price": 120.0
+          },
+          {
+            "name": "Door lock installation",
+            "qty": "1",
+            "price": 80.0
+          }
+        ]
+      }
+    }
+  ]
+}

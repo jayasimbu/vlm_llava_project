@@ -6,14 +6,16 @@ import numpy as np
 from core.prompt import get_prompt
 from config.settings import DEVICE, MAX_TOKENS, MOCK_INFERENCE
 
-_easyocr_reader = None
+_easyocr_readers = {}
 
-def _get_ocr_reader():
-    global _easyocr_reader
-    if _easyocr_reader is None:
+def _get_ocr_reader(lang='en'):
+    global _easyocr_readers
+    if lang not in _easyocr_readers:
         import easyocr
-        _easyocr_reader = easyocr.Reader(['en'], gpu=False)
-    return _easyocr_reader
+        # Always load english + requested lang
+        langs = ['en'] if lang == 'en' else [lang, 'en']
+        _easyocr_readers[lang] = easyocr.Reader(langs)
+    return _easyocr_readers[lang]
 
 def parse_date(date_str):
     date_str = date_str.strip()
@@ -297,16 +299,28 @@ def extract_fields_from_text(text):
     }
 
 
-def extract_data(image):
+def extract_data(image, lang='en'):
     if MOCK_INFERENCE:
-        # Convert PIL image to numpy array for EasyOCR
+        # Convert PIL image to numpy array for PaddleOCR
         img_np = np.array(image)
-        reader = _get_ocr_reader()
+        reader = _get_ocr_reader(lang)
         
-        # Read text from image
+        # Read text from image using EasyOCR
         ocr_results = reader.readtext(img_np)
-        text = " ".join([res[1] for res in ocr_results])
+        text_blocks = []
+        if ocr_results:
+            for res in ocr_results:
+                text_blocks.append(res[1])
+                
+        text = " ".join(text_blocks)
         
+        # Translate the text to English to support Any Language
+        try:
+            from deep_translator import GoogleTranslator
+            text = GoogleTranslator(source='auto', target='en').translate(text)
+        except Exception as e:
+            print(f"Translation failed or skipped: {e}")
+            
         # Parse fields
         parsed_fields = extract_fields_from_text(text)
         return json.dumps(parsed_fields)

@@ -1,0 +1,18 @@
+{
+  "users": [
+    {
+      "email": "jayasimbu66@gmail.com",
+      "display_name": "Simbu",
+      "salt": "036a8bdfb84d719b9f15011bbd36fb79",
+      "password_hash": "a0f929d664aed169aa6a6bb162b2e7758d46d09262af96c36552bdbd87c6041a",
+      "created_at": "2026-07-23T05:51:05+00:00"
+    },
+    {
+      "email": "ddc@gmail.com",
+      "display_name": "sa",
+      "salt": "13cdd4bf5c2922848a5968650dae867e",
+      "password_hash": "50655f36d1ddcfcbee1b2515e92101b5ff37480daec6b67343d4fe1078b84510",
+      "created_at": "2026-07-23T06:16:33+00:00"
+    }
+  ]
+}

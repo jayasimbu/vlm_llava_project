@@ -24,6 +24,25 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Local secrets
+# Local secrets - DO NOT COMMIT
 .env
+.env.local
 credentials.json
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env.local
+
+# Model weights / large files
+*.bin
+*.pt
+*.safetensors
+
+# Data / uploaded invoices
+data/test_images/
+uploads/
+
+# Antigravity agent files
+.agents/
+skills-lock.json

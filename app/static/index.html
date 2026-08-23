@@ -4,222 +4,279 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VLM Invoice Analyzer Dashboard</title>
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- SheetJS for client-side Excel exporting -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    <!-- Stylesheet -->
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <div class="background-decor blur-1"></div>
     <div class="background-decor blur-2"></div>
-    
-    <div class="app-container">
-        <!-- Header -->
-        <header class="main-header glass-panel">
-            <div class="logo">
-                <i class="fa-solid fa-file-invoice-dollar logo-icon"></i>
-                <h1>VLM Invoice <span>Intelligence</span></h1>
+
+    <div class="page-shell">
+        <section class="auth-shell glass-panel" id="authShell">
+            <div class="auth-copy">
+                <span class="eyebrow">Secure invoice workspace</span>
+                <h1>Manage invoices, history, and extraction from one clean workspace.</h1>
+                <p>Use a single account to upload bills, save processing history, and review extracted results without switching pages.</p>
+                <div class="auth-points">
+                    <div class="auth-point"><i class="fa-solid fa-shield-halved"></i> Account protected</div>
+                    <div class="auth-point"><i class="fa-solid fa-clock-rotate-left"></i> Saved invoice history</div>
+                    <div class="auth-point"><i class="fa-solid fa-file-invoice"></i> Same-page results</div>
+                </div>
+                <div class="auth-stats">
+                    <div class="auth-stat">
+                        <strong>2 flows</strong>
+                        <span>Login and signup</span>
+                    </div>
+                    <div class="auth-stat">
+                        <strong>1 dashboard</strong>
+                        <span>Upload and review</span>
+                    </div>
+                    <div class="auth-stat">
+                        <strong>Saved history</strong>
+                        <span>Per user session</span>
+                    </div>
+                </div>
             </div>
-            <div class="backend-status-badge" id="backendStatus">
-                <i class="fa-solid fa-circle-nodes"></i>
-                <span id="statusText">Initializing...</span>
+
+            <div class="auth-grid">
+                <form class="auth-card glass-card" id="loginForm">
+                    <div class="auth-card-header">
+                        <h2>Login</h2>
+                        <p>Continue with your saved invoice workspace.</p>
+                    </div>
+                    <label class="auth-field">
+                        <span>Email</span>
+                        <input type="email" id="loginEmail" placeholder="you@example.com" required>
+                    </label>
+                    <label class="auth-field">
+                        <span>Password</span>
+                        <input type="password" id="loginPassword" placeholder="Your password" required>
+                    </label>
+                    <button type="submit" class="btn btn-primary btn-block">Login</button>
+                </form>
+
+                <form class="auth-card glass-card" id="signupForm">
+                    <div class="auth-card-header">
+                        <h2>Sign Up</h2>
+                        <p>Create a new account and start saving bills with history.</p>
+                    </div>
+                    <label class="auth-field">
+                        <span>Display Name</span>
+                        <input type="text" id="signupName" placeholder="Your name" required>
+                    </label>
+                    <label class="auth-field">
+                        <span>Email</span>
+                        <input type="email" id="signupEmail" placeholder="you@example.com" required>
+                    </label>
+                    <label class="auth-field">
+                        <span>Password</span>
+                        <input type="password" id="signupPassword" placeholder="Create a password" required>
+                    </label>
+                    <button type="submit" class="btn btn-secondary btn-block">Create Account</button>
+                </form>
             </div>
-        </header>
+        </section>
 
-        <!-- Main Layout Split -->
-        <main class="dashboard-grid">
-            <!-- Left Panel: Input & QA -->
-            <section class="grid-col left-panel">
-                <!-- Upload Card -->
-                <div class="dashboard-card glass-panel" id="uploadCard">
-                    <h2 class="card-title"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Invoice</h2>
-                    <div class="drop-zone" id="dropZone">
-                        <input type="file" id="fileInput" accept="image/*" class="file-input">
-                        <div class="drop-zone-content">
-                            <i class="fa-regular fa-image upload-icon"></i>
-                            <p class="drop-text-primary">Drag & Drop your invoice image here</p>
-                            <p class="drop-text-secondary">or click to browse from files</p>
-                            <span class="file-limits">Supports PNG, JPG, JPEG, WEBP</span>
+        <div class="app-shell hidden" id="appShell">
+            <div class="app-container">
+                <header class="main-header glass-panel">
+                    <div class="logo">
+                        <i class="fa-solid fa-file-invoice-dollar logo-icon"></i>
+                        <h1>VLM Invoice <span>Intelligence</span></h1>
+                    </div>
+                    <div class="header-actions">
+                        <div class="backend-status-badge hidden" id="backendStatus">
+                            <i class="fa-solid fa-circle-nodes"></i>
+                            <span id="statusText">Initializing...</span>
+                        </div>
+                        <div class="user-badge hidden" id="userBadgeWrap">
+                            <span id="userBadge"></span>
+                            <button class="btn btn-secondary btn-sm" id="btnLogout" type="button">Logout</button>
                         </div>
                     </div>
-                    
-                    <!-- Preview Area -->
-                    <div class="preview-area hidden" id="previewArea">
-                        <img src="" alt="Invoice Preview" id="imagePreview" class="image-preview">
-                        <div class="preview-overlay">
-                            <button class="btn btn-danger" id="btnRemoveImage">
-                                <i class="fa-solid fa-trash-can"></i> Remove
-                            </button>
-                        </div>
-                    </div>
+                </header>
 
-                    <!-- Action Trigger -->
-                    <div class="action-footer hidden" id="actionFooter">
-                        <button class="btn btn-primary btn-block" id="btnExtract">
-                            <span id="btnText"><i class="fa-solid fa-microchip"></i> Analyze Invoice</span>
-                            <span class="spinner hidden" id="btnSpinner"></span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- QA Assistant Card -->
-                <div class="dashboard-card glass-panel hidden" id="qaCard">
-                    <h2 class="card-title"><i class="fa-regular fa-comment-dots"></i> Interactive Invoice Q&A</h2>
-                    <div class="chat-container">
-                        <div class="chat-messages" id="chatMessages">
-                            <div class="chat-message system">
-                                <p>Extraction complete! Ask me any specific details about this invoice (e.g. GST registration, payment terms, list of items, etc.).</p>
-                            </div>
-                        </div>
-                        <div class="chat-input-wrapper">
-                            <input type="text" id="chatInput" placeholder="Ask a question about this invoice..." autocomplete="off">
-                            <button id="btnSendChat" class="btn-send"><i class="fa-solid fa-paper-plane"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Right Panel: Extracted Fields -->
-            <section class="grid-col right-panel">
-                <!-- Results Card -->
-                <div class="dashboard-card glass-panel" id="resultsCard">
-                    <div class="results-header">
-                        <h2 class="card-title"><i class="fa-solid fa-table-list"></i> Extraction Results</h2>
-                        <div class="actions-group">
-                            <button class="btn btn-secondary btn-sm disabled" id="btnExportExcel">
-                                <i class="fa-regular fa-file-excel"></i> Export to Excel
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Idle View -->
-                    <div class="results-idle" id="resultsIdle">
-                        <i class="fa-solid fa-radar-chart idle-icon animated pulse"></i>
-                        <h3>Awaiting Invoice Image</h3>
-                        <p>Upload and run analysis on an invoice to view the extracted fields here.</p>
-                    </div>
-
-                    <!-- Extraction Result Display -->
-                    <div class="results-content hidden" id="resultsContent">
-                        <div class="results-grid">
-                            <!-- Vendor Card -->
-                            <div class="result-tile glass-card glow-blue">
-                                <div class="tile-header">
-                                    <span class="tile-label"><i class="fa-solid fa-shop"></i> Vendor Name</span>
-                                    <button class="btn-copy" data-target="resVendor"><i class="fa-regular fa-copy"></i></button>
+                <main class="dashboard-grid">
+                    <section class="grid-col left-panel">
+                        <div class="dashboard-card glass-panel" id="uploadCard">
+                            <h2 class="card-title"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Invoice</h2>
+                            <div class="drop-zone" id="dropZone">
+                                <label class="sr-only" for="fileInput">Upload invoice image</label>
+                                <input type="file" id="fileInput" accept="image/*" class="file-input" aria-label="Upload invoice image" title="Upload invoice image">
+                                <div class="drop-zone-content">
+                                    <i class="fa-regular fa-image upload-icon"></i>
+                                    <p class="drop-text-primary">Drag & Drop your invoice image here</p>
+                                    <p class="drop-text-secondary">or click to browse from files</p>
+                                    <span class="file-limits">Supports PNG, JPG, JPEG, WEBP</span>
                                 </div>
-                                <div class="tile-value" id="resVendor">Not extracted</div>
                             </div>
 
-                            <!-- Invoice Number Card -->
-                            <div class="result-tile glass-card glow-violet">
-                                <div class="tile-header">
-                                    <span class="tile-label"><i class="fa-solid fa-hashtag"></i> Invoice Number</span>
-                                    <button class="btn-copy" data-target="resInvoiceNum"><i class="fa-regular fa-copy"></i></button>
+                            <div class="preview-area hidden" id="previewArea">
+                                <img src="" alt="Invoice Preview" id="imagePreview" class="image-preview">
+                                <div class="preview-overlay">
+                                    <button class="btn btn-danger" id="btnRemoveImage" type="button">
+                                        <i class="fa-solid fa-trash-can"></i> Remove
+                                    </button>
                                 </div>
-                                <div class="tile-value" id="resInvoiceNum">Not extracted</div>
                             </div>
 
-                            <!-- Date Card -->
-                            <div class="result-tile glass-card glow-cyan">
-                                <div class="tile-header">
-                                    <span class="tile-label"><i class="fa-regular fa-calendar-days"></i> Invoice Date</span>
-                                    <button class="btn-copy" data-target="resDate"><i class="fa-regular fa-copy"></i></button>
-                                </div>
-                                <div class="tile-value" id="resDate">Not extracted</div>
-                            </div>
-
-                            <!-- Time Card -->
-                            <div class="result-tile glass-card glow-cyan">
-                                <div class="tile-header">
-                                    <span class="tile-label"><i class="fa-regular fa-clock"></i> Invoice Time</span>
-                                    <button class="btn-copy" data-target="resTime"><i class="fa-regular fa-copy"></i></button>
-                                </div>
-                                <div class="tile-value" id="resTime">Not extracted</div>
-                            </div>
-
-                            <!-- Subtotal Card -->
-                            <div class="result-tile glass-card glow-blue">
-                                <div class="tile-header">
-                                    <span class="tile-label"><i class="fa-solid fa-calculator"></i> Subtotal</span>
-                                    <button class="btn-copy" data-target="resSubtotal"><i class="fa-regular fa-copy"></i></button>
-                                </div>
-                                <div class="tile-value" id="resSubtotal">Not extracted</div>
-                            </div>
-
-                            <!-- Discount Card -->
-                            <div class="result-tile glass-card glow-rose">
-                                <div class="tile-header">
-                                    <span class="tile-label"><i class="fa-solid fa-tags"></i> Discount</span>
-                                    <button class="btn-copy" data-target="resDiscount"><i class="fa-regular fa-copy"></i></button>
-                                </div>
-                                <div class="tile-value" id="resDiscount">Not extracted</div>
-                            </div>
-
-                            <!-- Tax Card -->
-                            <div class="result-tile glass-card glow-violet">
-                                <div class="tile-header">
-                                    <span class="tile-label"><i class="fa-solid fa-percent"></i> Tax (GST)</span>
-                                    <button class="btn-copy" data-target="resTax"><i class="fa-regular fa-copy"></i></button>
-                                </div>
-                                <div class="tile-value" id="resTax">Not extracted</div>
-                            </div>
-
-                            <!-- Amount Card -->
-                            <div class="result-tile glass-card glow-emerald">
-                                <div class="tile-header">
-                                    <span class="tile-label"><i class="fa-solid fa-indian-rupee-sign"></i> Total Amount</span>
-                                    <button class="btn-copy" data-target="resTotal"><i class="fa-regular fa-copy"></i></button>
-                                </div>
-                                <div class="tile-value" id="resTotal">Not extracted</div>
+                            <div class="action-footer hidden" id="actionFooter">
+                                <button class="btn btn-primary btn-block" id="btnExtract" type="button">
+                                    <span id="btnText"><i class="fa-solid fa-microchip"></i> Analyze Invoice</span>
+                                    <span class="spinner hidden" id="btnSpinner"></span>
+                                </button>
                             </div>
                         </div>
 
-                        <!-- Line Items Table -->
-                        <div class="line-items-section hidden" id="itemsSection">
-                            <h3 class="section-subtitle"><i class="fa-solid fa-basket-shopping"></i> Line Items</h3>
-                            <div class="items-table-wrapper">
-                                <table class="items-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Description</th>
-                                            <th style="text-align: right;">Qty</th>
-                                            <th style="text-align: right;">Amount</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="itemsTableBody">
-                                        <!-- Dynamically generated rows -->
-                                    </tbody>
-                                </table>
+                        <div class="dashboard-card glass-panel hidden" id="qaCard">
+                            <h2 class="card-title"><i class="fa-regular fa-comment-dots"></i> Interactive Invoice Q&A</h2>
+                            <div class="chat-container">
+                                <div class="chat-messages" id="chatMessages">
+                                    <div class="chat-message system">
+                                        <p>Extraction complete! Ask me any specific details about this invoice (e.g. GST registration, payment terms, list of items, etc.).</p>
+                                    </div>
+                                </div>
+                                <div class="chat-input-wrapper">
+                                    <input type="text" id="chatInput" placeholder="Ask a question about this invoice..." autocomplete="off">
+                                    <button id="btnSendChat" class="btn-send" type="button" aria-label="Send question" title="Send question"><i class="fa-solid fa-paper-plane"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="grid-col right-panel">
+                        <div class="dashboard-card glass-panel" id="resultsCard">
+                            <div class="results-header">
+                                <h2 class="card-title"><i class="fa-solid fa-table-list"></i> Extraction Results</h2>
+                                <div class="actions-group">
+                                    <button class="btn btn-secondary btn-sm disabled" id="btnExportExcel" type="button">
+                                        <i class="fa-regular fa-file-excel"></i> Export to Excel
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="results-idle" id="resultsIdle">
+                                <i class="fa-solid fa-radar-chart idle-icon animated pulse"></i>
+                                <h3>Awaiting Invoice Image</h3>
+                                <p>Upload and run analysis on an invoice to view the extracted fields here.</p>
+                            </div>
+
+                            <div class="results-content hidden" id="resultsContent">
+                                <div class="results-grid">
+                                    <div class="result-tile glass-card glow-blue">
+                                        <div class="tile-header">
+                                            <span class="tile-label"><i class="fa-solid fa-shop"></i> Vendor Name</span>
+                                            <button class="btn-copy" data-target="resVendor" type="button" aria-label="Copy vendor name" title="Copy vendor name"><i class="fa-regular fa-copy"></i></button>
+                                        </div>
+                                        <div class="tile-value" id="resVendor">Not extracted</div>
+                                    </div>
+
+                                    <div class="result-tile glass-card glow-violet">
+                                        <div class="tile-header">
+                                            <span class="tile-label"><i class="fa-solid fa-hashtag"></i> Invoice Number</span>
+                                            <button class="btn-copy" data-target="resInvoiceNum" type="button" aria-label="Copy invoice number" title="Copy invoice number"><i class="fa-regular fa-copy"></i></button>
+                                        </div>
+                                        <div class="tile-value" id="resInvoiceNum">Not extracted</div>
+                                    </div>
+
+                                    <div class="result-tile glass-card glow-cyan">
+                                        <div class="tile-header">
+                                            <span class="tile-label"><i class="fa-regular fa-calendar-days"></i> Invoice Date</span>
+                                            <button class="btn-copy" data-target="resDate" type="button" aria-label="Copy invoice date" title="Copy invoice date"><i class="fa-regular fa-copy"></i></button>
+                                        </div>
+                                        <div class="tile-value" id="resDate">Not extracted</div>
+                                    </div>
+
+                                    <div class="result-tile glass-card glow-cyan">
+                                        <div class="tile-header">
+                                            <span class="tile-label"><i class="fa-regular fa-clock"></i> Invoice Time</span>
+                                            <button class="btn-copy" data-target="resTime" type="button" aria-label="Copy invoice time" title="Copy invoice time"><i class="fa-regular fa-copy"></i></button>
+                                        </div>
+                                        <div class="tile-value" id="resTime">Not extracted</div>
+                                    </div>
+
+                                    <div class="result-tile glass-card glow-blue">
+                                        <div class="tile-header">
+                                            <span class="tile-label"><i class="fa-solid fa-calculator"></i> Subtotal</span>
+                                            <button class="btn-copy" data-target="resSubtotal" type="button" aria-label="Copy subtotal" title="Copy subtotal"><i class="fa-regular fa-copy"></i></button>
+                                        </div>
+                                        <div class="tile-value" id="resSubtotal">Not extracted</div>
+                                    </div>
+
+                                    <div class="result-tile glass-card glow-rose">
+                                        <div class="tile-header">
+                                            <span class="tile-label"><i class="fa-solid fa-tags"></i> Discount</span>
+                                            <button class="btn-copy" data-target="resDiscount" type="button" aria-label="Copy discount" title="Copy discount"><i class="fa-regular fa-copy"></i></button>
+                                        </div>
+                                        <div class="tile-value" id="resDiscount">Not extracted</div>
+                                    </div>
+
+                                    <div class="result-tile glass-card glow-violet">
+                                        <div class="tile-header">
+                                            <span class="tile-label"><i class="fa-solid fa-percent"></i> Tax (GST)</span>
+                                            <button class="btn-copy" data-target="resTax" type="button" aria-label="Copy tax" title="Copy tax"><i class="fa-regular fa-copy"></i></button>
+                                        </div>
+                                        <div class="tile-value" id="resTax">Not extracted</div>
+                                    </div>
+
+                                    <div class="result-tile glass-card glow-emerald">
+                                        <div class="tile-header">
+                                            <span class="tile-label"><i class="fa-solid fa-indian-rupee-sign"></i> Total Amount</span>
+                                            <button class="btn-copy" data-target="resTotal" type="button" aria-label="Copy total amount" title="Copy total amount"><i class="fa-regular fa-copy"></i></button>
+                                        </div>
+                                        <div class="tile-value" id="resTotal">Not extracted</div>
+                                    </div>
+                                </div>
+
+                                <div class="line-items-section hidden" id="itemsSection">
+                                    <h3 class="section-subtitle"><i class="fa-solid fa-basket-shopping"></i> Line Items</h3>
+                                    <div class="items-table-wrapper">
+                                        <table class="items-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Description</th>
+                                                    <th class="text-right">Qty</th>
+                                                    <th class="text-right">Amount</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="itemsTableBody"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-section">
+                                    <button class="accordion-trigger" id="accordionTrigger" type="button">
+                                        <span><i class="fa-solid fa-code"></i> View Raw JSON Payload</span>
+                                        <i class="fa-solid fa-chevron-down chevron-icon"></i>
+                                    </button>
+                                    <div class="accordion-content hidden" id="accordionContent">
+                                        <pre><code id="rawJsonCode">{}</code></pre>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-
-                        <!-- JSON Raw Output Accordion -->
-                        <div class="accordion-section">
-                            <button class="accordion-trigger" id="accordionTrigger">
-                                <span><i class="fa-solid fa-code"></i> View Raw JSON Payload</span>
-                                <i class="fa-solid fa-chevron-down chevron-icon"></i>
-                            </button>
-                            <div class="accordion-content hidden" id="accordionContent">
-                                <pre><code id="rawJsonCode">{}</code></pre>
+                        <div class="dashboard-card glass-panel" id="historyCard">
+                            <div class="results-header">
+                                <h2 class="card-title"><i class="fa-solid fa-clock-rotate-left"></i> Saved Bills</h2>
+                                <button class="btn btn-secondary btn-sm" id="btnRefreshHistory" type="button">
+                                    <i class="fa-solid fa-rotate"></i> Refresh
+                                </button>
                             </div>
+                            <div class="history-empty" id="historyEmpty">Your saved invoices will appear here after login and upload.</div>
+                            <div class="history-list" id="historyList"></div>
                         </div>
-                    </div>
-                </div>
-            </section>
-        </main>
+                    </section>
+                </main>
+            </div>
+        </div>
     </div>
 
-    <!-- Notification Toast -->
     <div id="toast" class="toast hidden">Copied to clipboard!</div>
-    
     <script src="/static/app.js"></script>
 </body>
 </html>

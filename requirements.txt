@@ -9,3 +9,10 @@ pytest
 httpx
 filelock
 fsspec
+easyocr
+deep-translator
+python-dotenv
+numpy
+opencv-python-headless
+gspread
+oauth2client
